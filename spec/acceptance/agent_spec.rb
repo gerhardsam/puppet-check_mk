@@ -11,15 +11,13 @@ describe 'check_mk::agent class' do
   end
 
   context 'default parameters' do
-    it 'should work with no errors' do
-      pp = <<-EOS
-      class { 'check_mk::agent': }
+    let(:pp) do
+      <<-EOS
+        class { 'check_mk::agent': }
       EOS
-
-      # Run it twice and test for idempotency
-      apply_manifest(pp, :catch_failures => true)
-      expect(apply_manifest(pp, :catch_failures => true).exit_code).to be_zero
     end
+    # Run it twice and test for idempotency
+    it_behaves_like "a idempotent resource"
 
     describe package(package_name) do
       it { is_expected.to be_installed }
