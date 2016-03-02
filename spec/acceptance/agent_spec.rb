@@ -1,15 +1,7 @@
 require 'spec_helper_acceptance'
+require_relative './agent_version.rb'
 
 describe 'check_mk::agent class' do
-  case fact('osfamily')
-    when 'RedHat'
-      package_name = 'check-mk-agent'
-      service_name = 'xinetd'
-    when 'Debian'
-      package_name = 'check-mk-agent'
-      service_name = 'xinetd'
-  end
-
   context 'default parameters' do
     let(:pp) do
       <<-EOS
@@ -19,11 +11,11 @@ describe 'check_mk::agent class' do
     # Run it twice and test for idempotency
     it_behaves_like "a idempotent resource"
 
-    describe package(package_name) do
+    describe package($package_name) do
       it { is_expected.to be_installed }
     end
 
-    describe service(service_name) do
+    describe service($service_name) do
       it { is_expected.to be_enabled }
       it { is_expected.to be_running }
     end
